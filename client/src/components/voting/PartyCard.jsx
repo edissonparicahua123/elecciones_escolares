@@ -1,5 +1,4 @@
 import React from "react";
-import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 
 export default function PartyCard({ party, onVote, isSelected }) {
@@ -9,9 +8,9 @@ export default function PartyCard({ party, onVote, isSelected }) {
       whileTap={{ scale: 0.95 }}
       transition={{ type: "spring", stiffness: 300 }}
     >
-      <Card
+      <div
         onClick={() => onVote(party)}
-        className={`cursor-pointer overflow-hidden transition-all duration-300 h-full ${
+        className={`cursor-pointer overflow-hidden transition-all duration-300 h-full rounded-2xl ${
           isSelected
             ? "ring-4 ring-offset-4 shadow-2xl scale-105"
             : "hover:shadow-2xl"
@@ -19,13 +18,14 @@ export default function PartyCard({ party, onVote, isSelected }) {
         style={{
           borderColor: party.color,
           borderWidth: "4px",
-          ringColor: isSelected ? party.color : "transparent"
+          borderStyle: "solid",
+          ringColor: isSelected ? party.color : "transparent",
         }}
       >
         <div
           className="relative"
           style={{
-            background: `linear-gradient(135deg, ${party.color}20 0%, ${party.color}05 100%)`
+            background: `linear-gradient(135deg, ${party.color}20 0%, ${party.color}05 100%)`,
           }}
         >
           {/* Logo Section */}
@@ -47,7 +47,10 @@ export default function PartyCard({ party, onVote, isSelected }) {
               </div>
             )}
 
-            <h3 className="text-3xl font-black mb-2" style={{ color: party.color }}>
+            <h3
+              className="text-3xl font-black mb-2"
+              style={{ color: party.color }}
+            >
               {party.name}
             </h3>
 
@@ -76,7 +79,7 @@ export default function PartyCard({ party, onVote, isSelected }) {
             </motion.div>
           )}
         </div>
-      </Card>
+      </div>
     </motion.div>
   );
 }

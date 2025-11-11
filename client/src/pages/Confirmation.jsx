@@ -1,21 +1,18 @@
 import React from "react";
-import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { createPageUrl } from "@/utils";
-import { Button } from "@/components/ui/button";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { partiesApi } from "../api/partiesApi";
 import { CheckCircle, Home } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Confirmation() {
   const navigate = useNavigate();
-  const urlParams = new URLSearchParams(window.location.search);
-  const partyId = urlParams.get("partyId");
+  const [searchParams] = useSearchParams();
+  const partyId = searchParams.get("partyId");
 
-  const { data: parties } = useQuery({
+  const { data: parties = [] } = useQuery({
     queryKey: ["parties"],
-    queryFn: () => base44.entities.Party.list(),
-    initialData: [],
+    queryFn: partiesApi.getAll,
   });
 
   const votedParty = parties.find((p) => p.id === partyId);
@@ -99,23 +96,25 @@ export default function Confirmation() {
                   Importante
                 </p>
                 <p className="text-yellow-800">
-                  Si deseas votar nuevamente, deberás esperar 25 segundos desde tu último voto
+                  Si deseas votar nuevamente, deberás esperar 25 segundos desde
+                  tu último voto
                 </p>
               </div>
             </div>
           </div>
 
-          <Button
-            onClick={() => navigate(createPageUrl("Home"))}
-            className="w-full h-16 text-xl font-bold bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+          <button
+            onClick={() => navigate("/")}
+            className="w-full h-16 text-xl font-bold bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg flex items-center justify-center gap-2 transition-all"
           >
-            <Home className="w-6 h-6 mr-2" />
+            <Home className="w-6 h-6" />
             Regresar al Inicio
-          </Button>
+          </button>
 
           <div className="mt-6 p-6 bg-gray-50 rounded-xl text-center">
             <p className="text-sm text-gray-600">
-              📊 Los resultados se mantienen confidenciales durante el proceso de votación
+              📊 Los resultados se mantienen confidenciales durante el proceso de
+              votación
             </p>
           </div>
         </div>

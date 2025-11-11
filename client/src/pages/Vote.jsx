@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { createPageUrl } from "@/utils";
-import { Button } from "@/components/ui/button";
+import { partiesApi } from "../api/partiesApi";
 import { ArrowLeft, Loader2, Clock, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PartyCard from "../components/voting/PartyCard";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Progress } from "@/components/ui/progress";
 
 export default function Vote() {
   const navigate = useNavigate();
@@ -18,10 +14,9 @@ export default function Vote() {
   const [countdown, setCountdown] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const { data: parties, isLoading } = useQuery({
+  const { data: parties = [], isLoading } = useQuery({
     queryKey: ["parties"],
-    queryFn: () => base44.entities.Party.list(),
-    initialData: [],
+    queryFn: partiesApi.getAll,
   });
 
   useEffect(() => {
@@ -49,20 +44,14 @@ export default function Vote() {
   }, [voteLocked, countdown]);
 
   const voteMutation = useMutation({
-    mutationFn: async (party) => {
-      await base44.entities.Party.update(party.id, {
-        votes: party.votes + 1,
-      });
-      return party;
-    },
-    onSuccess: (party) => {
+    mutationFn: (partyId) => partiesApi.vote(partyId),
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["parties"] });
       localStorage.setItem("lastVoteTime", Date.now().toString());
       setShowSuccess(true);
       
-      // Redirigir al home después de 2 segundos
       setTimeout(() => {
-        navigate(createPageUrl("Home"));
+        navigate("/");
       }, 2000);
     },
   });
@@ -70,12 +59,12 @@ export default function Vote() {
   const handleVote = (party) => {
     if (voteLocked || voteMutation.isPending) return;
     setSelectedParty(party);
-    voteMutation.mutate(party);
+    voteMutation.mutate(party.id);
   };
 
   const progressPercent = voteLocked ? ((25 - countdown) / 25) * 100 : 0;
 
-  // Pantalla de éxito temporal
+  // Pantalla de éxito
   if (showSuccess && selectedParty) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600 flex items-center justify-center p-4">
@@ -144,15 +133,20 @@ export default function Vote() {
               {countdown}
             </div>
             <p className="text-gray-700 font-semibold">segundos restantes</p>
-            <Progress value={progressPercent} className="h-3 mt-4" />
+            <div className="w-full bg-gray-200 rounded-full h-3 mt-4 overflow-hidden">
+              <div
+                className="bg-gradient-to-r from-orange-500 to-red-500 h-3 rounded-full transition-all duration-1000"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
           </div>
 
-          <Button
-            onClick={() => navigate(createPageUrl("Home"))}
-            className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+          <button
+            onClick={() => navigate("/")}
+            className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-lg transition-all"
           >
             Regresar al Inicio
-          </Button>
+          </button>
         </motion.div>
       </div>
     );
@@ -166,14 +160,13 @@ export default function Vote() {
           animate={{ y: 0, opacity: 1 }}
           className="mb-8"
         >
-          <Button
-            variant="outline"
-            onClick={() => navigate(createPageUrl("Home"))}
-            className="mb-4 bg-white"
+          <button
+            onClick={() => navigate("/")}
+            className="mb-4 bg-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-100 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft className="w-4 h-4" />
             Volver
-          </Button>
+          </button>
 
           <div className="bg-white rounded-2xl shadow-2xl p-8 mb-6">
             <h1 className="text-4xl font-bold text-center mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -190,11 +183,11 @@ export default function Vote() {
             <Loader2 className="w-12 h-12 animate-spin text-white" />
           </div>
         ) : parties.length === 0 ? (
-          <Alert className="bg-white">
-            <AlertDescription className="text-center text-lg">
+          <div className="bg-white rounded-xl p-8 text-center">
+            <p className="text-lg text-gray-600">
               No hay partidos disponibles para votar en este momento.
-            </AlertDescription>
-          </Alert>
+            </p>
+          </div>
         ) : (
           <motion.div
             initial={{ opacity: 0 }}

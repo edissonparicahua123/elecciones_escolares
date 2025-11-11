@@ -1,28 +1,25 @@
 import React from "react";
-import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { createPageUrl } from "@/utils";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Users, TrendingUp } from "lucide-react";
+import { partiesApi } from "../api/partiesApi";
+import { ArrowLeft, Users, TrendingUp, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import ResultsChart from "../components/admin/ResultsChart";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Results() {
   const navigate = useNavigate();
 
-  const { data: parties, isLoading } = useQuery({
+  const { data: parties = [], isLoading } = useQuery({
     queryKey: ["parties"],
-    queryFn: () => base44.entities.Party.list(),
-    initialData: [],
+    queryFn: partiesApi.getAll,
     refetchInterval: 3000,
   });
 
   const totalVotes = parties.reduce((sum, p) => sum + p.votes, 0);
-  const leader = parties.reduce((max, p) => (p.votes > max.votes ? p : max), {
-    votes: 0,
-  });
+  const leader = parties.reduce(
+    (max, p) => (p.votes > max.votes ? p : max),
+    { votes: 0 }
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
@@ -32,14 +29,13 @@ export default function Results() {
           animate={{ y: 0, opacity: 1 }}
           className="mb-8"
         >
-          <Button
-            variant="outline"
-            onClick={() => navigate(createPageUrl("Home"))}
-            className="mb-6"
+          <button
+            onClick={() => navigate("/")}
+            className="mb-6 px-4 py-2 border-2 border-gray-300 rounded-lg flex items-center gap-2 hover:bg-gray-100 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft className="w-4 h-4" />
             Volver al Inicio
-          </Button>
+          </button>
 
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-2xl p-8 text-white">
             <div className="flex items-center gap-4 mb-4">
@@ -82,8 +78,8 @@ export default function Results() {
         </motion.div>
 
         {isLoading ? (
-          <div className="space-y-4">
-            <Skeleton className="h-96 w-full rounded-xl" />
+          <div className="flex justify-center items-center h-96">
+            <Loader2 className="w-16 h-16 animate-spin text-blue-600" />
           </div>
         ) : (
           <motion.div

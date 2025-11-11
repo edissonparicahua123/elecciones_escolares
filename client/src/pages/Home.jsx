@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
-import { Button } from "@/components/ui/button";
-import { Vote, Shield } from "lucide-react";
+import { Vote, Shield, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Home() {
@@ -79,25 +77,25 @@ export default function Home() {
               transition={{ delay: 0.5 }}
               className="space-y-4"
             >
-              <Link to={createPageUrl("Vote")}>
-                <Button
-                  size="lg"
-                  className="w-full h-20 text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-2xl transform transition-all hover:scale-105 border-4 border-white/30"
-                >
-                  <Vote className="w-8 h-8 mr-3" />
+              <Link to="/vote">
+                <button className="w-full h-20 text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-2xl transform transition-all hover:scale-105 border-4 border-white/30 rounded-xl flex items-center justify-center gap-3">
+                  <Vote className="w-8 h-8" />
                   Marcar Votación
-                </Button>
+                </button>
               </Link>
 
-              <Link to={createPageUrl("AdminLogin")}>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full h-14 text-lg font-semibold bg-white/10 hover:bg-white/20 text-white border-2 border-white/40 backdrop-blur-sm"
-                >
-                  <Shield className="w-5 h-5 mr-2" />
+              <Link to="/results">
+                <button className="w-full h-14 text-lg font-semibold bg-white/10 hover:bg-white/20 text-white border-2 border-white/40 backdrop-blur-sm rounded-xl flex items-center justify-center gap-2 transition-all">
+                  <BarChart3 className="w-5 h-5" />
+                  Ver Resultados
+                </button>
+              </Link>
+
+              <Link to="/admin-login">
+                <button className="w-full h-14 text-lg font-semibold bg-white/10 hover:bg-white/20 text-white border-2 border-white/40 backdrop-blur-sm rounded-xl flex items-center justify-center gap-2 transition-all">
+                  <Shield className="w-5 h-5" />
                   Acceso Administrador
-                </Button>
+                </button>
               </Link>
             </motion.div>
 
