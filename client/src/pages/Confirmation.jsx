@@ -18,11 +18,13 @@ export default function Confirmation() {
   const votedParty = parties.find((p) => p.id === partyId);
 
   return (
+    // Fondo más oscuro y con textura
     <div className="min-h-screen bg-slate-950 relative overflow-hidden flex items-center justify-center p-4">
-      {/* Animated Background Orbs - Purple/Blue theme */}
+      {/* Animated Background Orbs - Pink/Purple theme */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute -top-40 -left-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
+          // Orb morado intenso
+          className="absolute -top-40 -left-40 w-96 h-96 bg-purple-700 rounded-full mix-blend-screen filter blur-3xl opacity-20"
           animate={{
             x: [0, 100, 0],
             y: [0, 50, 0],
@@ -35,7 +37,8 @@ export default function Confirmation() {
           }}
         />
         <motion.div
-          className="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
+          // Orb rosa/azul
+          className="absolute -bottom-40 -right-40 w-96 h-96 bg-pink-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
           animate={{
             x: [0, -100, 0],
             y: [0, -50, 0],
@@ -48,6 +51,7 @@ export default function Confirmation() {
           }}
         />
         <motion.div
+          // Orb índigo
           className="absolute top-1/2 left-1/2 w-96 h-96 bg-indigo-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
           animate={{
             x: [0, 50, 0],
@@ -62,12 +66,12 @@ export default function Confirmation() {
         />
       </div>
 
-      {/* Floating Particles */}
+      {/* Floating Particles - CAMBIO: partículas rosas para ser más llamativo */}
       <div className="absolute inset-0">
         {[...Array(30)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-purple-400 rounded-full"
+            className="absolute w-1 h-1 bg-pink-400 rounded-full"
             style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
@@ -86,7 +90,7 @@ export default function Confirmation() {
         ))}
       </div>
 
-      {/* Floating Sparkles */}
+      {/* Floating Sparkles - CAMBIO: partículas rosas/púrpura */}
       <div className="absolute inset-0">
         {[...Array(12)].map((_, i) => (
           <motion.div
@@ -107,7 +111,8 @@ export default function Confirmation() {
               delay: Math.random() * 2,
             }}
           >
-            <Sparkles className="w-4 h-4 text-purple-400" />
+            {/* Se cambió el color de Sparkles a pink-400 */}
+            <Sparkles className="w-4 h-4 text-pink-400" /> 
           </motion.div>
         ))}
       </div>
@@ -115,14 +120,15 @@ export default function Confirmation() {
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
 
+      {/* Main Card - CAMBIO: backdrop-blur y sombra más marcada */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0, rotateY: -15 }}
         animate={{ scale: 1, opacity: 1, rotateY: 0 }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
-        className="relative z-10 bg-slate-900 backdrop-blur-xl border border-slate-700 rounded-2xl shadow-2xl overflow-hidden max-w-2xl w-full"
+        className="relative z-10 bg-slate-900/80 backdrop-blur-2xl border border-slate-700/50 rounded-3xl shadow-2xl shadow-black/70 overflow-hidden max-w-2xl w-full"
       >
-        {/* Header with gradient */}
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-8 text-white text-center relative overflow-hidden">
+        {/* Header with gradient - CAMBIO: Gradiente Pink/Purple */}
+        <div className="bg-gradient-to-r from-pink-600 to-purple-600 p-8 text-white text-center relative overflow-hidden">
           {/* Success Icon */}
           <motion.div
             initial={{ scale: 0, rotate: -180 }}
@@ -130,8 +136,10 @@ export default function Confirmation() {
             transition={{ delay: 0.3, type: "spring", stiffness: 150 }}
             className="relative w-28 h-28 mx-auto mb-6"
           >
-            <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-xl rounded-full blur-lg"></div>
-            <div className="relative w-full h-full bg-slate-900/90 backdrop-blur-xl border-2 border-purple-400/30 rounded-full flex items-center justify-center shadow-2xl">
+            {/* CAMBIO: Glow effect más fuerte y alineado al tema */}
+            <div className="absolute inset-0 bg-gradient-to-br from-pink-500/80 to-purple-500/80 rounded-full blur-xl"></div>
+            {/* Ícono central con blur y border más definido */}
+            <div className="relative w-full h-full bg-slate-900/90 backdrop-blur-xl border-2 border-pink-400/50 rounded-full flex items-center justify-center shadow-2xl">
               <CheckCircle className="w-16 h-16 text-green-400" />
             </div>
           </motion.div>
@@ -156,17 +164,18 @@ export default function Confirmation() {
         </div>
 
         <div className="p-8 space-y-6">
-          {/* Voted Party Card */}
+          {/* Voted Party Card - CAMBIO: Glassmorphism effect en el fondo */}
           {votedParty && (
             <motion.div
               initial={{ y: 30, opacity: 0, scale: 0.9 }}
               animate={{ y: 0, opacity: 1, scale: 1 }}
               transition={{ delay: 0.8, duration: 0.6, type: "spring" }}
               whileHover={{ scale: 1.02, y: -3 }}
-              className="p-6 rounded-xl border-2 bg-slate-800 flex items-center gap-6 shadow-lg transition-all"
+              // CAMBIO: Fondo con blur y borde de party.color más sutil
+              className="p-6 rounded-xl border-2 bg-slate-900/70 backdrop-blur-sm flex items-center gap-6 shadow-xl transition-all"
               style={{
                 borderColor: votedParty.color,
-                backgroundColor: `${votedParty.color}15`,
+                backgroundColor: `${votedParty.color}18`, // Lighter tint
               }}
             >
               {votedParty.logo_url && (
@@ -211,12 +220,12 @@ export default function Confirmation() {
             </motion.div>
           )}
 
-          {/* Success Message */}
+          {/* Success Message - CAMBIO: Glassmorphism effect */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.4, duration: 0.6 }}
-            className="bg-slate-800 border border-slate-700 rounded-xl p-6 text-center"
+            className="bg-slate-900/70 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 text-center shadow-lg"
           >
             <motion.div
               animate={{ scale: [1, 1.1, 1] }}
@@ -243,12 +252,12 @@ export default function Confirmation() {
             </motion.p>
           </motion.div>
 
-          {/* Warning Message */}
+          {/* Warning Message - CAMBIO: Border más suave y padding ajustado */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1.7, duration: 0.6 }}
-            className="bg-yellow-900/50 border border-yellow-700 rounded-xl p-5"
+            className="bg-yellow-900/30 border border-yellow-600/50 rounded-xl p-6 shadow-lg"
           >
             <div className="flex items-start gap-3">
               <motion.div
@@ -279,7 +288,7 @@ export default function Confirmation() {
             </div>
           </motion.div>
 
-          {/* Return Home Button */}
+          {/* Return Home Button - CAMBIO: Gradiente Pink/Purple */}
           <motion.button
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -289,22 +298,25 @@ export default function Confirmation() {
             onClick={() => navigate("/")}
             className="w-full relative group"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
-            <div className="relative bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-4 px-4 rounded-lg shadow-xl flex items-center justify-center gap-2 transition-all border border-purple-500/50">
+            {/* Glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+            {/* Button content */}
+            <div className="relative bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold py-4 px-4 rounded-lg shadow-xl flex items-center justify-center gap-2 transition-all border border-pink-500/50">
               <Home className="w-5 h-5" />
               Regresar al Inicio
             </div>
           </motion.button>
 
-          {/* Info Footer */}
+          {/* Info Footer - CAMBIO: Glassmorphism effect */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 2.1, duration: 0.6 }}
-            className="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center"
+            className="bg-slate-900/70 backdrop-blur-sm border border-slate-700/50 rounded-xl p-5 text-center shadow-lg"
           >
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Info className="w-4 h-4 text-purple-400" />
+              {/* Icon color updated to pink-400 */}
+              <Info className="w-4 h-4 text-pink-400" /> 
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}

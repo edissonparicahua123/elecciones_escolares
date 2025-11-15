@@ -27,10 +27,11 @@ export default function Results() {
 
   return (
     <div className="min-h-screen bg-slate-950 relative overflow-hidden p-6">
-      {/* Animated Background Orbs - Purple/Blue theme */}
+      {/* Animated Background Orbs - Pink/Purple theme (Actualizado) */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute -top-40 -left-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
+          // Orb Rosa
+          className="absolute -top-40 -left-40 w-96 h-96 bg-pink-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
           animate={{
             x: [0, 100, 0],
             y: [0, 50, 0],
@@ -43,7 +44,8 @@ export default function Results() {
           }}
         />
         <motion.div
-          className="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
+          // Orb Púrpura
+          className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
           animate={{
             x: [0, -100, 0],
             y: [0, -50, 0],
@@ -56,6 +58,7 @@ export default function Results() {
           }}
         />
         <motion.div
+          // Orb Índigo
           className="absolute top-1/2 left-1/2 w-96 h-96 bg-indigo-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
           animate={{
             x: [0, 50, 0],
@@ -70,12 +73,12 @@ export default function Results() {
         />
       </div>
 
-      {/* Floating Particles */}
+      {/* Floating Particles (Actualizado a rosa) */}
       <div className="absolute inset-0">
         {[...Array(25)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-purple-400 rounded-full"
+            className="absolute w-1 h-1 bg-pink-400 rounded-full"
             style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
@@ -115,8 +118,8 @@ export default function Results() {
             <span>Volver al Inicio</span>
           </motion.button>
 
-          {/* Title Card */}
-          <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl shadow-2xl p-8 text-white mb-6 border border-purple-500/30">
+          {/* Title Card - Actualizado con gradiente pink/purple */}
+          <div className="bg-gradient-to-r from-pink-600 to-purple-600 rounded-2xl shadow-2xl p-8 text-white mb-6 border border-pink-500/30">
             <div className="flex items-center gap-4 mb-4">
               <motion.div
                 animate={{ rotate: [0, 5, 0, -5, 0] }}
@@ -143,44 +146,65 @@ export default function Results() {
 
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            {/* Total Votes */}
+            {/* Total Votes Card - Actualizado con glassmorphism y pink/purple */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-slate-900 border border-slate-700 rounded-xl p-5 relative overflow-hidden group hover:border-purple-500/50 transition-all"
+              // Aplicando glassmorphism
+              className="bg-slate-900/70 backdrop-blur-sm border border-slate-700/50 rounded-xl p-5 relative overflow-hidden group hover:border-pink-500/50 transition-all"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
+                  {/* Icon Gradient - Actualizado a pink/purple */}
+                  <div className="w-10 h-10 bg-gradient-to-br from-pink-600 to-purple-600 rounded-lg flex items-center justify-center">
                     <Users className="w-5 h-5 text-white" />
                   </div>
                   <span className="text-sm font-medium text-slate-300">Total de Votos</span>
                 </div>
                 <p className="text-3xl font-black text-slate-100">{totalVotes}</p>
                 <div className="flex items-center gap-1 mt-2">
-                  <Activity className="w-3 h-3 text-purple-400" />
+                  <Activity className="w-3 h-3 text-pink-400" />
                   <span className="text-xs text-slate-400">Participación activa</span>
                 </div>
               </div>
             </motion.div>
 
-            {/* Leader Card */}
+            {/* Leader Card - Actualizado con glassmorphism */}
             {leader.votes > 0 && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-slate-900 rounded-xl p-5 relative overflow-hidden border-2 group hover:shadow-xl transition-all"
+                // Aplicando glassmorphism
+                className="bg-slate-900/70 backdrop-blur-sm rounded-xl p-5 relative overflow-hidden border-2 group hover:shadow-xl transition-all"
                 style={{ borderColor: leader.color }}
               >
                 <div className="absolute inset-0 opacity-10" style={{ backgroundColor: leader.color }} />
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: leader.color }}>
-                      <Crown className="w-5 h-5 text-white" />
-                    </div>
+                    {leader.logo_url ? (
+                      <div className="w-10 h-10 rounded-lg overflow-hidden bg-white shadow-lg">
+                        <img
+                          src={leader.logo_url}
+                          alt={leader.name}
+                          className="w-full h-full object-contain p-1"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.parentElement.innerHTML = `
+                              <div class="w-full h-full flex items-center justify-center text-white" style="background-color: ${leader.color}">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                              </div>
+                            `;
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: leader.color }}>
+                        <Crown className="w-5 h-5 text-white" />
+                      </div>
+                    )}
                     <span className="text-sm font-medium text-slate-100">1er Lugar</span>
                   </div>
                   <p className="text-2xl font-black text-slate-100 mb-1">{leader.name}</p>
@@ -192,21 +216,40 @@ export default function Results() {
               </motion.div>
             )}
 
-            {/* Second Place */}
+            {/* Second Place - Actualizado con glassmorphism */}
             {secondPlace.votes > 0 && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-slate-900 rounded-xl p-5 relative overflow-hidden border-2 group hover:shadow-xl transition-all"
+                // Aplicando glassmorphism
+                className="bg-slate-900/70 backdrop-blur-sm rounded-xl p-5 relative overflow-hidden border-2 group hover:shadow-xl transition-all"
                 style={{ borderColor: secondPlace.color }}
               >
                 <div className="absolute inset-0 opacity-10" style={{ backgroundColor: secondPlace.color }} />
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: secondPlace.color }}>
-                      <Medal className="w-5 h-5 text-white" />
-                    </div>
+                    {secondPlace.logo_url ? (
+                      <div className="w-10 h-10 rounded-lg overflow-hidden bg-white shadow-lg">
+                        <img
+                          src={secondPlace.logo_url}
+                          alt={secondPlace.name}
+                          className="w-full h-full object-contain p-1"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.parentElement.innerHTML = `
+                              <div class="w-full h-full flex items-center justify-center" style="background-color: ${secondPlace.color}">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                              </div>
+                            `;
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: secondPlace.color }}>
+                        <Medal className="w-5 h-5 text-white" />
+                      </div>
+                    )}
                     <span className="text-sm font-medium text-slate-100">2do Lugar</span>
                   </div>
                   <p className="text-2xl font-black text-slate-100 mb-1">{secondPlace.name}</p>
@@ -218,21 +261,40 @@ export default function Results() {
               </motion.div>
             )}
 
-            {/* Third Place */}
+            {/* Third Place - Actualizado con glassmorphism */}
             {thirdPlace.votes > 0 && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-slate-900 rounded-xl p-5 relative overflow-hidden border-2 group hover:shadow-xl transition-all"
+                // Aplicando glassmorphism
+                className="bg-slate-900/70 backdrop-blur-sm rounded-xl p-5 relative overflow-hidden border-2 group hover:shadow-xl transition-all"
                 style={{ borderColor: thirdPlace.color }}
               >
                 <div className="absolute inset-0 opacity-10" style={{ backgroundColor: thirdPlace.color }} />
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: thirdPlace.color }}>
-                      <Award className="w-5 h-5 text-white" />
-                    </div>
+                    {thirdPlace.logo_url ? (
+                      <div className="w-10 h-10 rounded-lg overflow-hidden bg-white shadow-lg">
+                        <img
+                          src={thirdPlace.logo_url}
+                          alt={thirdPlace.name}
+                          className="w-full h-full object-contain p-1"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.parentElement.innerHTML = `
+                              <div class="w-full h-full flex items-center justify-center" style="background-color: ${thirdPlace.color}">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                              </div>
+                            `;
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: thirdPlace.color }}>
+                        <Award className="w-5 h-5 text-white" />
+                      </div>
+                    )}
                     <span className="text-sm font-medium text-slate-100">3er Lugar</span>
                   </div>
                   <p className="text-2xl font-black text-slate-100 mb-1">{thirdPlace.name}</p>
@@ -246,14 +308,15 @@ export default function Results() {
           </div>
         </motion.div>
 
-        {/* Chart Section */}
+        {/* Chart Section - Actualizado con glassmorphism y pink/purple */}
         {isLoading ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-col justify-center items-center h-96 bg-slate-900 border border-slate-700 rounded-2xl"
+            // Aplicando glassmorphism al loading state
+            className="flex flex-col justify-center items-center h-96 bg-slate-900/70 backdrop-blur-sm border border-slate-700/50 rounded-2xl"
           >
-            <Loader2 className="w-16 h-16 animate-spin text-purple-400 mb-4" />
+            <Loader2 className="w-16 h-16 animate-spin text-pink-400 mb-4" />
             <p className="text-slate-300 text-sm">Cargando resultados...</p>
           </motion.div>
         ) : (
@@ -261,10 +324,12 @@ export default function Results() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-slate-900 border border-slate-700 rounded-2xl p-6"
+            // Aplicando glassmorphism
+            className="bg-slate-900/70 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
+              {/* Icon Gradient - Actualizado a pink/purple */}
+              <div className="w-10 h-10 bg-gradient-to-br from-pink-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <BarChart3 className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -276,16 +341,17 @@ export default function Results() {
           </motion.div>
         )}
 
-        {/* Detailed Results Table */}
+        {/* Detailed Results Table - Actualizado con glassmorphism y pink/purple */}
         {!isLoading && sortedParties.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="mt-6 bg-slate-900 border border-slate-700 rounded-2xl p-6"
+            // Aplicando glassmorphism
+            className="mt-6 bg-slate-900/70 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6"
           >
             <h2 className="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-purple-400" />
+              <Trophy className="w-5 h-5 text-pink-400" /> {/* Actualizado a pink-400 */}
               Ranking Completo
             </h2>
             <div className="space-y-3">
@@ -295,13 +361,35 @@ export default function Results() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + index * 0.1 }}
-                  className="flex items-center gap-4 p-4 bg-slate-800 border border-slate-700 rounded-xl hover:border-purple-500/50 transition-all group"
+                  // Aplicando glassmorphism en la fila de la tabla
+                  className="flex items-center gap-4 p-4 bg-slate-800/70 backdrop-blur-sm border border-slate-700/50 rounded-xl hover:border-pink-500/50 transition-all group"
                 >
                   <div className="flex items-center justify-center w-8 h-8 rounded-lg font-bold text-sm" style={{ backgroundColor: party.color, color: 'white' }}>
                     {index + 1}
                   </div>
-                  {party.logo_url && (
-                    <img src={party.logo_url} alt={party.name} className="w-12 h-12 rounded-lg object-cover bg-slate-700 p-1" />
+                  {party.logo_url ? (
+                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-white shadow-lg">
+                      <img 
+                        src={party.logo_url} 
+                        alt={party.name} 
+                        className="w-full h-full object-contain p-1" 
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.innerHTML = `
+                            <div class="w-full h-full flex items-center justify-center text-white font-bold text-xl" style="background-color: ${party.color}">
+                              ${party.name[0]}
+                            </div>
+                          `;
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div 
+                      className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-xl"
+                      style={{ backgroundColor: party.color }}
+                    >
+                      {party.name[0]}
+                    </div>
                   )}
                   <div className="flex-1">
                     <h3 className="font-bold text-slate-100 text-lg">{party.name}</h3>

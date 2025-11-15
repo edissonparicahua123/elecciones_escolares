@@ -22,11 +22,13 @@ export default function AdminLoginPage() {
   };
 
   return (
+    // CAMBIO: Fondo más oscuro y con textura
     <div className="min-h-screen bg-slate-950 relative overflow-hidden flex items-center justify-center p-4">
-      {/* Animated Background Orbs - Purple/Blue theme */}
+      {/* Animated Background Orbs - Pink/Purple theme */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute -top-40 -left-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
+          // CAMBIO: Orb morado más intenso
+          className="absolute -top-40 -left-40 w-96 h-96 bg-purple-700 rounded-full mix-blend-screen filter blur-3xl opacity-20"
           animate={{
             x: [0, 100, 0],
             y: [0, 50, 0],
@@ -39,7 +41,8 @@ export default function AdminLoginPage() {
           }}
         />
         <motion.div
-          className="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
+          // CAMBIO: Orb rosa/azul
+          className="absolute -bottom-40 -right-40 w-96 h-96 bg-pink-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
           animate={{
             x: [0, -100, 0],
             y: [0, -50, 0],
@@ -52,6 +55,7 @@ export default function AdminLoginPage() {
           }}
         />
         <motion.div
+          // CAMBIO: Orb índigo
           className="absolute top-1/2 left-1/2 w-96 h-96 bg-indigo-600 rounded-full mix-blend-screen filter blur-3xl opacity-20"
           animate={{
             x: [0, 50, 0],
@@ -66,12 +70,12 @@ export default function AdminLoginPage() {
         />
       </div>
 
-      {/* Floating Particles */}
+      {/* Floating Particles - CAMBIO: partículas rosas para ser más llamativo */}
       <div className="absolute inset-0">
         {[...Array(30)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-purple-400 rounded-full"
+            className="absolute w-1 h-1 bg-pink-400 rounded-full"
             style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
@@ -92,18 +96,19 @@ export default function AdminLoginPage() {
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
 
+      {/* Login Card - CAMBIO: Se añadió backdrop-blur y sombra más marcada */}
       <motion.div
         initial={{ scale: 0.9, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="relative z-10 bg-slate-900 backdrop-blur-xl border border-slate-700 rounded-2xl shadow-2xl p-8 max-w-md w-full"
+        className="relative z-10 bg-slate-900/80 backdrop-blur-lg border border-slate-700/50 rounded-2xl shadow-2xl shadow-black/70 p-8 max-w-md w-full"
       >
         {/* Back Button */}
         <motion.button
           whileHover={{ scale: 1.05, x: -3 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => navigate('/')}
-          className="mb-8 flex items-center gap-2 text-slate-300 hover:text-slate-100 transition-colors group"
+          className="mb-8 flex items-center gap-2 text-slate-300 hover:text-pink-400 transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span className="text-sm font-medium">Volver al inicio</span>
@@ -116,20 +121,21 @@ export default function AdminLoginPage() {
           transition={{ delay: 0.2, duration: 0.6, type: "spring" }}
           className="relative w-20 h-20 mx-auto mb-6"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl blur-xl opacity-60"></div>
-          <div className="relative w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg border border-purple-500/30">
+          {/* CAMBIO: Se mejoró el gradiente del ícono y el glow */}
+          <div className="absolute inset-0 bg-gradient-to-br from-pink-600 to-purple-600 rounded-2xl blur-xl opacity-60"></div>
+          <div className="relative w-full h-full bg-gradient-to-br from-pink-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg border border-pink-500/30">
             <Shield className="w-10 h-10 text-white" />
           </div>
         </motion.div>
 
-        {/* Title */}
+        {/* Title - CAMBIO: Gradiente de título más vibrante */}
         <motion.h1
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
           className="text-3xl font-bold text-center mb-2"
         >
-          <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
             Acceso Administrativo
           </span>
         </motion.h1>
@@ -144,13 +150,13 @@ export default function AdminLoginPage() {
         </motion.p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Error Alert */}
+          {/* Error Alert - CAMBIO: Fondo más oscuro y con más contraste */}
           {error && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: -10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-red-900/50 border border-red-700 rounded-lg p-4 flex items-start gap-3"
+              className="bg-red-900/70 border border-red-700 rounded-lg p-4 flex items-start gap-3"
             >
               <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
               <div>
@@ -164,7 +170,7 @@ export default function AdminLoginPage() {
             </motion.div>
           )}
 
-          {/* Password Input */}
+          {/* Password Input - CAMBIO: Focus Ring Rosa */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -184,13 +190,14 @@ export default function AdminLoginPage() {
                   setPassword(e.target.value);
                   setError(false);
                 }}
-                className="w-full pl-11 pr-4 py-3.5 bg-slate-800 border border-slate-600 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-slate-100 placeholder-slate-400 transition-all"
+                // CLASES MEJORADAS: Focus pink-500
+                className="w-full pl-11 pr-4 py-3.5 bg-slate-800 border border-slate-600 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/30 text-slate-100 placeholder-slate-400 transition-all"
                 autoFocus
               />
             </div>
           </motion.div>
 
-          {/* Submit Button */}
+          {/* Submit Button - CAMBIO: Gradiente Pink/Purple */}
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -200,8 +207,10 @@ export default function AdminLoginPage() {
             type="submit"
             className="w-full relative group"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
-            <div className="relative bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-3.5 px-4 rounded-lg shadow-xl flex items-center justify-center gap-2 transition-all border border-purple-500/50">
+            {/* Glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+            {/* Button content */}
+            <div className="relative bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold py-3.5 px-4 rounded-lg shadow-xl flex items-center justify-center gap-2 transition-all border border-pink-500/50">
               <Lock className="w-4 h-4" />
               Ingresar al Panel
             </div>
