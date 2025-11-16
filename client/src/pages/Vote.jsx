@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { partiesApi } from "../api/partiesApi";
-import { ArrowLeft, Loader2, Clock, CheckCircle, AlertCircle, Shield, Lock, Users, Sparkles } from "lucide-react";
+import { ArrowLeft, Loader2, Clock, CheckCircle, AlertCircle, Shield, Lock, Users, Sparkles, X, Vote as VoteIcon, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PartyCard from "../components/voting/PartyCard";
 
@@ -10,6 +10,7 @@ export default function Vote() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [selectedParty, setSelectedParty] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [voteLocked, setVoteLocked] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -48,21 +49,340 @@ export default function Vote() {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["parties"] });
       localStorage.setItem("lastVoteTime", Date.now().toString());
-      setShowSuccess(true);
       
+      // Cerrar modal inmediatamente
+      setShowConfirmModal(false);
+      
+      // Pequeña pausa antes de mostrar éxito
+      setTimeout(() => {
+        setShowSuccess(true);
+      }, 100);
+      
+      // Redirigir después de mostrar éxito
       setTimeout(() => {
         navigate("/");
-      }, 2000);
+      }, 2500);
     },
+    onError: (error) => {
+      console.error("Error al votar:", error);
+      setShowConfirmModal(false);
+      setSelectedParty(null);
+      alert("Hubo un error al registrar tu voto. Intenta nuevamente.");
+    }
   });
 
-  const handleVote = (party) => {
+  const handleSelectParty = (party) => {
     if (voteLocked || voteMutation.isPending) return;
     setSelectedParty(party);
-    voteMutation.mutate(party.id);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmVote = () => {
+    if (selectedParty && !voteMutation.isPending) {
+      voteMutation.mutate(selectedParty.id);
+    }
+  };
+
+  const handleCancelVote = () => {
+    setShowConfirmModal(false);
+    setTimeout(() => {
+      setSelectedParty(null);
+    }, 300);
   };
 
   const progressPercent = voteLocked ? ((25 - countdown) / 25) * 100 : 0;
+
+  // ========== MODAL DE CONFIRMACIÓN ==========
+  const ConfirmationModal = () => (
+    <AnimatePresence>
+      {showConfirmModal && selectedParty && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          onClick={handleCancelVote}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-2xl border-2 rounded-3xl shadow-2xl max-w-md w-full overflow-hidden"
+            style={{ borderColor: selectedParty.color }}
+          >
+            {/* Glow effect de fondo */}
+            <div 
+              className="absolute inset-0 opacity-10 blur-3xl"
+              style={{ backgroundColor: selectedParty.color }}
+            />
+
+            {/* Corner Decorations */}
+            <div className="absolute -top-2 -left-2 w-8 h-8 border-t-4 border-l-4 rounded-tl-2xl" style={{ borderColor: selectedParty.color }} />
+            <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-4 border-r-4 rounded-br-2xl" style={{ borderColor: selectedParty.color }} />
+
+            {/* Close Button */}
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={handleCancelVote}
+              className="absolute top-4 right-4 z-10 w-10 h-10 bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:border-red-500/50 transition-all"
+            >
+              <X className="w-5 h-5" />
+            </motion.button>
+
+            {/* Header con gradiente */}
+            <div 
+              className="relative px-8 pt-8 pb-6 border-b border-slate-700/50"
+              style={{
+                background: `linear-gradient(135deg, ${selectedParty.color}15 0%, transparent 100%)`
+              }}
+            >
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.1 }}
+                className="flex items-center gap-2 mb-2"
+              >
+                <VoteIcon className="w-6 h-6" style={{ color: selectedParty.color }} />
+                <h2 className="text-2xl font-black text-slate-100">
+                  Confirmar Voto
+                </h2>
+              </motion.div>
+              <p className="text-slate-400 text-sm">
+                ¿Estás seguro de que deseas votar por este partido?
+              </p>
+            </div>
+
+            {/* Contenido del Modal */}
+            <div className="relative p-8">
+              {/* Indicador de carga dentro del modal */}
+              {voteMutation.isPending && (
+                <div className="absolute inset-0 bg-slate-900/90 backdrop-blur-sm rounded-b-3xl flex items-center justify-center z-10">
+                  <div className="text-center">
+                    <Loader2 className="w-12 h-12 animate-spin mx-auto mb-3" style={{ color: selectedParty.color }} />
+                    <p className="text-slate-200 font-semibold">Registrando voto...</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Logo del Partido - MÁS GRANDE */}
+              <motion.div
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2, type: "spring" }}
+                className="mb-6 text-center"
+              >
+                <div className="relative inline-block">
+                  {/* Glow effect detrás del logo */}
+                  <motion.div 
+                    className="absolute inset-0 rounded-2xl blur-2xl opacity-40"
+                    style={{ backgroundColor: selectedParty.color }}
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      opacity: [0.3, 0.5, 0.3],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                  
+                  {selectedParty.logo_url ? (
+                    <div className="relative w-40 h-40 mx-auto rounded-2xl overflow-hidden shadow-2xl bg-slate-800 border-4 p-3" style={{ borderColor: selectedParty.color }}>
+                      <img
+                        src={selectedParty.logo_url}
+                        alt={selectedParty.name}
+                        className="w-full h-full object-contain rounded-xl"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.innerHTML = `
+                            <div class="w-full h-full flex items-center justify-center text-5xl font-black rounded-xl" style="background: linear-gradient(135deg, ${selectedParty.color}35, ${selectedParty.color}15); color: ${selectedParty.color}">
+                              ${selectedParty.name[0]}
+                            </div>
+                          `;
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className="relative w-40 h-40 mx-auto rounded-2xl flex items-center justify-center shadow-2xl text-white text-5xl font-black border-4"
+                      style={{ 
+                        background: `linear-gradient(135deg, ${selectedParty.color}45, ${selectedParty.color}25)`,
+                        color: selectedParty.color,
+                        borderColor: selectedParty.color
+                      }}
+                    >
+                      {selectedParty.name[0]}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+
+              {/* Información del Partido */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="space-y-4 mb-6"
+              >
+                {/* Nombre del Partido */}
+                <div className="text-center">
+                  <h3 
+                    className="text-3xl font-black mb-2"
+                    style={{ color: selectedParty.color }}
+                  >
+                    {selectedParty.name}
+                  </h3>
+                  
+                  {/* Slogan */}
+                  {selectedParty.slogan && (
+                    <p className="text-lg font-semibold text-slate-300 italic mb-3">
+                      "{selectedParty.slogan}"
+                    </p>
+                  )}
+
+                  {/* Símbolo y Color */}
+                  <div className="flex items-center justify-center gap-4 text-sm">
+                    <div className="flex items-center gap-2 bg-slate-800/50 backdrop-blur-sm px-4 py-2 rounded-lg border border-slate-700">
+                      <span className="text-slate-400">Símbolo:</span>
+                      <span className="font-bold uppercase" style={{ color: selectedParty.color }}>
+                        {selectedParty.symbol}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-slate-800/50 backdrop-blur-sm px-4 py-2 rounded-lg border border-slate-700">
+                      <span className="text-slate-400">Color:</span>
+                      <div 
+                        className="w-5 h-5 rounded-full border-2 border-slate-600"
+                        style={{ backgroundColor: selectedParty.color }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Descripción */}
+                {selectedParty.description && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4"
+                  >
+                    <div className="flex items-start gap-2 mb-2">
+                      <Info className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm font-semibold text-slate-300">Descripción:</p>
+                    </div>
+                    <p className="text-sm text-slate-400 leading-relaxed pl-6">
+                      {selectedParty.description}
+                    </p>
+                  </motion.div>
+                )}
+              </motion.div>
+
+              {/* Advertencia */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="bg-yellow-900/20 border border-yellow-600/30 rounded-xl p-4 mb-6"
+              >
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-semibold text-yellow-300 mb-1">
+                      Importante
+                    </p>
+                    <p className="text-xs text-yellow-200/80 leading-relaxed">
+                      Una vez confirmado, tu voto será registrado de forma anónima y no podrás cambiarlo.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Botones de Acción */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="flex gap-3"
+              >
+                {/* Botón Cancelar */}
+                <motion.button
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleCancelVote}
+                  className="flex-1 relative group overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-slate-700 rounded-xl blur-md opacity-50 group-hover:opacity-70 transition-opacity" />
+                  <div className="relative bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold py-4 rounded-xl border border-slate-600 hover:border-slate-500 transition-all shadow-lg">
+                    Cancelar
+                  </div>
+                </motion.button>
+
+                {/* Botón Confirmar Voto */}
+                <motion.button
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleConfirmVote}
+                  disabled={voteMutation.isPending}
+                  className="flex-1 relative group overflow-hidden"
+                >
+                  <motion.div 
+                    className="absolute inset-0 rounded-xl blur-lg opacity-60 group-hover:opacity-80 transition-opacity"
+                    style={{ backgroundColor: selectedParty.color }}
+                  />
+                  <div 
+                    className="relative text-white font-bold py-4 rounded-xl shadow-xl border-2 transition-all flex items-center justify-center gap-2"
+                    style={{ 
+                      backgroundColor: selectedParty.color,
+                      borderColor: selectedParty.color
+                    }}
+                  >
+                    {voteMutation.isPending ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Votando...</span>
+                      </>
+                    ) : (
+                      <>
+                        <VoteIcon className="w-5 h-5" />
+                        <span>Confirmar Voto</span>
+                      </>
+                    )}
+                  </div>
+                </motion.button>
+              </motion.div>
+
+              {/* Footer de Seguridad */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 }}
+                className="mt-4 pt-4 border-t border-slate-800"
+              >
+                <div className="flex items-center justify-center gap-4 text-xs text-slate-500">
+                  <div className="flex items-center gap-1">
+                    <Lock className="w-3 h-3" />
+                    <span>Voto Seguro</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Shield className="w-3 h-3" />
+                    <span>100% Anónimo</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <CheckCircle className="w-3 h-3" />
+                    <span>Verificable</span>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 
   // ========== PANTALLA DE ÉXITO ==========
   if (showSuccess && selectedParty) {
@@ -548,7 +868,7 @@ export default function Vote() {
                   >
                     <PartyCard
                       party={party}
-                      onVote={handleVote}
+                      onVote={handleSelectParty}
                       isSelected={selectedParty?.id === party.id}
                     />
                   </motion.div>
@@ -556,37 +876,11 @@ export default function Vote() {
               </AnimatePresence>
             </motion.div>
           )}
-
-          {/* Loading Overlay durante votación */}
-          <AnimatePresence>
-            {voteMutation.isPending && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50"
-              >
-                <motion.div
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="relative bg-gradient-to-br from-slate-900/90 via-slate-800/20 to-slate-900/90 backdrop-blur-2xl border border-purple-500/30 rounded-2xl p-8 text-center shadow-2xl"
-                >
-                  {/* Corner Decorations */}
-                  <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-purple-400 rounded-tl-lg"></div>
-                  <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-purple-400 rounded-br-lg"></div>
-
-                  <div className="relative mb-4">
-                    <div className="absolute inset-0 bg-purple-500/20 blur-3xl rounded-full"></div>
-                    <Loader2 className="relative w-16 h-16 animate-spin text-purple-400 mx-auto" />
-                  </div>
-                  <p className="text-xl font-semibold text-slate-100">Registrando tu voto...</p>
-                  <p className="text-sm text-slate-400 mt-2">Por favor espera</p>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
       </div>
+
+      {/* Modal de Confirmación */}
+      <ConfirmationModal />
     </div>
   );
 }
