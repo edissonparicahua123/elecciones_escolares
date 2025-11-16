@@ -25,7 +25,43 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import ResultsChart from "../components/admin/ResultsChart";
 
-const SYMBOLS = ["sol", "agua", "tierra", "aire", "fuego", "estrella"];
+const SYMBOLS = [
+  "sol",
+  "agua",
+  "tierra",
+  "aire",
+  "fuego",
+  "estrella",
+  "luna",
+  "rayo",
+  "nube",
+  "montaña",
+  "árbol",
+  "flor",
+  "mar",
+  "roca",
+  "viento",
+  "hoja",
+  "tormenta",
+  "nieve",
+  "trueno",
+  "campo",
+  "bosque",
+  "desierto",
+  "rio",
+  "laguna",
+  "volcán",
+  "planeta",
+  "cometa",
+  "galaxia",
+  "diamante",
+  "corazón",
+  "circulo",
+  "triángulo",
+  "cuadrado",
+  "espiral"
+];
+
 const PARTY_COLORS = ["#8B5CF6", "#3B82F6", "#06B6D4", "#10B981", "#F59E0B", "#EF4444", "#6366F1", "#14B8A6"];
 
 export default function Admin() {
