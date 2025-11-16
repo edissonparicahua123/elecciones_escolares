@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Lock, AlertCircle, ArrowLeft, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const ADMIN_PASSWORD = 'admin2024';
+const ADMIN_PASSWORD = 'admin2025';
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();

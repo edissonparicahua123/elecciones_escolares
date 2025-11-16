@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Lock, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-const ADMIN_PASSWORD = "admin2024";
+const ADMIN_PASSWORD = "admin2025";
 
 export default function AdminLogin({ open, onOpenChange, onSuccess }) {
   const [password, setPassword] = useState("");

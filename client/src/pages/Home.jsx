@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Vote, Shield, CheckCircle, Lock, Users, Sparkles, ArrowRight } from "lucide-react";
+import { Vote, Shield, CheckCircle, Lock, Users, Sparkles, ArrowRight, Code } from "lucide-react";
 import { motion } from "framer-motion";
 import Lottie from "react-lottie-player";
 
@@ -92,7 +92,7 @@ export default function Home() {
           type: "spring",
           stiffness: 100
         }}
-        className="hidden lg:block absolute left-6 top-1/2 -translate-y-1/2 z-10"
+        className="hidden lg:block absolute left-6 top-1/3 -translate-y-1/2 z-10"
       >
         <div className="absolute inset-0 bg-purple-500/20 blur-3xl rounded-full"></div>
         
@@ -135,7 +135,7 @@ export default function Home() {
           type: "spring",
           stiffness: 100
         }}
-        className="hidden lg:block absolute right-6 top-1/2 -translate-y-1/2 z-10"
+        className="hidden lg:block absolute right-6 top-1/3 -translate-y-1/2 z-10"
       >
         <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full"></div>
         
@@ -446,9 +446,41 @@ export default function Home() {
               </p>
             </motion.div>
             
-            <p className="text-slate-300 text-sm font-medium max-w-xl mx-auto leading-relaxed">
+            <p className="text-slate-300 text-sm font-medium max-w-xl mx-auto leading-relaxed mb-6">
               Todos los votos son anónimos y confidenciales · Elecciones Escolares 2025
             </p>
+
+            {/* Developer Credit Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.8, duration: 0.6 }}
+              className="mt-8 pt-6 border-t border-slate-700/50"
+            >
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-slate-900/60 to-slate-800/60 backdrop-blur-xl border border-slate-600/40 rounded-full px-6 py-3 shadow-lg"
+              >
+                <Code className="w-5 h-5 text-purple-400" />
+                <div className="text-left">
+                  <p className="text-xs text-slate-400 leading-tight">Desarrollado por</p>
+                  <p className="text-sm font-bold text-slate-200 leading-tight">
+                    Edisson Ronald Paricahua Calla
+                  </p>
+                </div>
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                  className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white text-xs font-black"
+                >
+                  FS
+                </motion.div>
+              </motion.div>
+              
+              <p className="text-xs text-slate-300 mt-3 font-semibold">
+                Full Stack Developer
+              </p>
+            </motion.div>
           </motion.div>
 
         </div>
